@@ -115,7 +115,7 @@ public class CRUDCliente {
 	}
 	
 	public String deletar(Cliente cliente) {
-String msg = "";
+			String msg = "";
 		
 		//Criação dos objetos para a conexao com o banco de dados
 		try {
@@ -135,7 +135,7 @@ String msg = "";
 			if(r > 0)
 				msg = "Deletado com sucesso";
 			else
-				msg = "Não foi possivel cadastrar";
+				msg = "Não foi possivel deletar";
 			
 		}
 		catch(SQLException ex) {
