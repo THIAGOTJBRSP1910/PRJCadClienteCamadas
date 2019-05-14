@@ -74,7 +74,44 @@ public class CRUDCliente {
 	}
 	
 	public String atualizar(Cliente cliente) {
-		return null;
+				String msg = "";
+		
+		//Criação dos objetos para a conexao com o banco de dados
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver").newInstance();//pega a pasta do driver
+			con = DriverManager.getConnection("jdbc:mysql://localhost:3307/clientedb","root","");//Realiza a conexão do driver
+			
+			String consulta = "UPDATE tbcliente SET nome=?,email=?,telefone=?,idade=? WHERE id=?";//Trazer o resultado da tabela
+			
+			pst = con.prepareStatement(consulta);
+			
+			pst.setString(1, cliente.getNome());
+			pst.setString(2, cliente.getEmail());
+			pst.setString(3, cliente.getTelefone());
+			pst.setInt(4, cliente.getIdade());
+			pst.setInt(5, cliente.getId());
+			
+			int r = pst.executeUpdate();
+			
+			
+			if(r > 0)
+				msg = "Atualizado com sucesso";
+			else
+				msg = "Não foi possivel atualizar";
+			
+		}
+		catch(SQLException ex) {
+			msg = "Erro ao tentar atualizar: "+ex.getMessage();//mostrar mensagem de erro
+		}
+		catch(Exception e) {
+			msg = "Erro inesperado:"+e.getMessage();
+		}
+		finally {
+			try{con.close();}catch(Exception e) {e.printStackTrace();}//quando terminar de processar o banco, ele fecha
+		}
+		
+		
+		return msg;
 	}
 	
 	public String deletar(Cliente cliente) {
