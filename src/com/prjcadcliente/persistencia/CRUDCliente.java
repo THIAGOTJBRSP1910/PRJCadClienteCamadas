@@ -199,11 +199,54 @@ public class CRUDCliente {
 	}
 	
 	public Cliente PesquisarPorId(int id) {
-		return null;
+			Cliente cliente = new Cliente();//array é um do lado do outro com"," lista é um embaixo do outro
+		
+		try {
+			//carregar o drive de comunicação com o banco de dados
+			Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
+			
+			//Chamar o gerenciador de driver
+			con = DriverManager.getConnection("jdbc:mysql://localhost:3307/clientedb","root","");
+			
+			//Vamos criar a consulta para selecionar os clientes por nome
+			String consulta = "Select * from tbcliente where id=?";
+			
+			pst = con.prepareStatement(consulta);
+			
+			pst.setInt(1,id);
+			
+			//Vamos executar a consulta e guardar o resultado na variavel rs
+			rs = pst.executeQuery();
+			
+			/*
+			 * Vamos pegar um cliente por vez que está no rs e adiciona-lo
+			 * a lista de clientes para, então retorna-la
+			 */
+			if(rs.next()) {
+				cliente.setId(rs.getInt(0));
+				cliente.setNome(rs.getString(1));
+				cliente.setEmail(rs.getString(2));
+				cliente.setTelefone(rs.getString(3));
+				cliente.setIdade(rs.getInt(4));
+			}
+		}//Fim do try
+		
+		catch(SQLException ex) {
+			ex.printStackTrace();
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		finally {
+			try {con.close();} catch(Exception e) {e.printStackTrace();}
+		}
+		
+		
+		return cliente;
 	}
 	
 	public List<Cliente> PesquisarTodos() {
-List<Cliente> lista = new ArrayList<Cliente>();
+			List<Cliente> lista = new ArrayList<Cliente>();
 		
 		try {
 			//carregar o drive de comunicação com o banco de dados
